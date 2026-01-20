@@ -27,6 +27,7 @@ cd Milk-Ledger
 python src/main.py 
 
 ### Project structure
+```bash
 src/
 ├── main.py              # Entry point, launches the game
 ├── game.py              # Main game loop and game state
@@ -49,7 +50,7 @@ src/
 │   ├── __init__.py
 │   └── interface.py     # User interface (console-based)
 └── config.json            # Game constants, balance settings 
-
+```
 
 ### Current Development Status
 
