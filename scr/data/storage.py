@@ -60,7 +60,12 @@ class Storage():
 				is_alive BOOLEAN DEFAULT 1,
 				location_type TEXT, #pen, bull_pen, market
 				pen_x INTEGER,
-				pen_y INTEGER
+				pen_y INTEGER,
+
+				is_owned BOOLEAN DEFAULT 1,  -- 1 = наша, 0 = продана
+				sold_timestamp REAL,         -- когда продана (для истории)
+				sold_price REAL,             -- за сколько продана
+				is_alive BOOLEAN DEFAULT 1   -- 1 = жива, 0 = умерла (на будущее)
 
 				FOREIGN KEY (mother_id) REFERENCES animals(id),
     			FOREIGN KEY (father_id) REFERENCES animals(id)

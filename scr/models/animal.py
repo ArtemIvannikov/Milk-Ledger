@@ -1,3 +1,6 @@
+import random
+import config
+
 class Animal():
 	'''базовый класс для всех животных'''
 	def __init__(self):
@@ -24,6 +27,19 @@ class Animal():
 		генерируется случайное имя
 
 		'''
+
+	@staticmethod	
+	def _generate_name(gender, perks=None):
+		'''Генерирует случайное имя'''
+
+	def __get_perk_themed_name(gender, perks=None):
+		'''Выбирает случайное прилагательное для перка животного '''
+		perk_themed_names = {config.PERK_THEMED_NAMES}
+
+		for perk in perks:
+			if perk in perk_themed_names:
+				return perk_themed_names[perk][gender]
+
 		
 
 class Cow(Animal):
