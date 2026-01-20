@@ -21,6 +21,7 @@ A strategic cattle breeding and dairy farm simulation game with genetics, econom
 # Clone the repository
 git clone https://github.com/Artemlvannikov/Milk-Ledger.git
 cd Milk-Ledger
+```
 
 # Run the game (not available)
 python src/main.py 
