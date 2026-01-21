@@ -6,9 +6,10 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, project_root)
 
 import config
-
+from data import storage
 
 class Animal():
+    db = storage.Storage()
     '''базовый класс для всех животных'''
     def __init__(self):
         pass
@@ -26,23 +27,37 @@ class Animal():
         pass
 
     @staticmethod
-    def generate_id_and_name(gender):
-        '''
-        рождается теленок
-        вызывается этот метод
-        генерируется уникальный id в формате cow-1234 или bull-1234
-        генерируется случайное имя
+    def create_new_animal(): #WARNING NOT WORK
+        '''создает взрослое животное для покупки в магазине'''
 
-        '''
+        gender = random.choice(('male', 'female'))
+        type = 'bull' if gender == 'male' else 'cow'
+        perks = Animal._generate_new_animal_perks()
+        new_animal_name = Animal._generate_name(gender, perks)
+        new_animal = {
+            'name': new_animal_name,
+            'type': type,
+            'gender': gender,
+            'age': 1,
+            'location_type': 'market',
+        }
+        db.save_animal(new_animal)
+
+
+    @staticmethod
+    def _generate_new_animal_perks():
+        pass
+
 
     @staticmethod   
     def _generate_name(gender, perks=None):
         '''Генерирует случайное имя'''
+
         if gender == 'female':
             prefixes = config.FEMALE_PREFIXES
             suffixes = config.FEMALE_SUFFIXES
             full_names = config.FEMALE_FULLNAMES
-        elif gender == 'male':
+        else:
             prefixes = config.MALE_PREFIXES
             suffixes = config.MALE_SUFFIXES
             full_names = config.MALE_FULLNAMES

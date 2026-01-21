@@ -46,7 +46,7 @@ class Storage():
 				type TEXT NOT NULL, #cow, bull, calf
 				gender TEXT NOT NULL,
 				age REAL DEFAULT 0, 
-				birth_timestamp REAL NOT 0,
+				birth_timestamp REAL NOT NULL,
 
 				milk_per_day REAL DEFAULT 0,
 				is_pregnant BOOLEAN DEFAULT 0,
@@ -119,8 +119,8 @@ class Storage():
 		# сохраняет даннные животного
 		self.cursor.execute('''
 			INSERT OR REPLACE INTO animals
-			(id, name, type, gender, age, ...)
-			VALUES (?, ?, ?, ?, ?, ...)
+			(name, type, gender, age, ...)
+			VALUES (?, ?, ?, ?, ...)
 
 			''', (animal_data, ))
 
@@ -181,4 +181,5 @@ class Storage():
 		self.cursor.execute('SELECT * FROM animals WHERE is_alive = 1')
 		return self.cursor.fetchone()
 
-	def add_transaction()
+	def add_transaction():
+		pass
