@@ -21,7 +21,7 @@ class Storage():
 	def create_tables(self):
 		self.cursor.execute("""
 			CREATE TABLE IF NOT EXIST perks (
-				id TEXT PRIMARY KEY AUTOINCREMENT, 
+				id INTEGER PRIMARY KEY AUTOINCREMENT, 
 				name TEXT UNIQUE NOT NULL,
 				description TEXT,
 				effect_type TEXT,
@@ -31,7 +31,7 @@ class Storage():
 			);
 
 			CREATE TABLE IF NOT EXIST animal_perks (
-				animal_id TEXT NOT NULL, 
+				animal_id INTEGER NOT NULL, 
 				perk_id INTEGER NOT NULL,
 				PRIMARY KEY (animal_id, perk_id),
 				FOREING KEY (animal_id) REFERENCES animals(id) ON DELETE CASCADE,
@@ -41,9 +41,9 @@ class Storage():
 			);
 
 			CREATE TABLE IF NOT EXIST animals (
-				id TEXT PRIMARY KEY, 
+				id INTEGER PRIMARY KEY AUTOINCREMENT, 
 				name TEXT NOT NULL,
-				type TEXT NOT NULL,
+				type TEXT NOT NULL, #cow, bull, calf
 				gender TEXT NOT NULL,
 				age REAL DEFAULT 0, 
 				birth_timestamp REAL NOT 0,
