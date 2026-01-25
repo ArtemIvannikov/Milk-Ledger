@@ -8,6 +8,7 @@ sys.path.insert(0, project_root)
 
 from models.animal import Animal
 import config
+from data import storage
 
 class Tests(unittest.TestCase):
 	
@@ -31,6 +32,42 @@ class Tests(unittest.TestCase):
 		result = Animal._generate_name('male', ['Супер-Удой'])
 		print(f"Male with 'Супер-Удой': {result}")
 		self.assertIsNotNone(result)
+
+	def test_create_new_animal_cow(self):
+		self.storage = storage.Storage(config.PATH)
+		details = {
+			'gender': 'female',
+			'type': 'cow',
+			'perks': ['Супер-Удой'],
+			'milk_per_day': 10,
+		}
+
+		result = Animal.create_new_animal(self.storage, **details)
+		print(result)
+
+
+	def test_create_new_animal_bull(self):
+		self.storage = storage.Storage(config.PATH)
+		details = {
+			'gender': 'male',
+			'type': 'bull',
+			'perks': ['Супер-Удой'],
+		}
+
+		result = Animal.create_new_animal(self.storage, **details)
+		print(result)
+
+	def test_create_new_animal_calf(self):
+		self.storage = storage.Storage(config.PATH)
+		details = {
+			'gender': 'female',
+			'type': 'calf',
+			'perks': ['Супер-Удой'],
+			'milk_per_day': 10,
+		}
+
+		result = Animal.create_new_animal(self.storage, **details)
+		print(result)
 
 if __name__ == '__main__':
     # Запуск всех тестов

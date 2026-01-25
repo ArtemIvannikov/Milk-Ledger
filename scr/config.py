@@ -1,3 +1,52 @@
+import os
+import sys
+
+
+if getattr(sys, 'frozen', False):
+    # EXE
+    BASE_DIR = os.path.dirname(sys.executable)
+else:
+    # .py
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+PATH = os.path.join(BASE_DIR, 'my_database.db')
+
+
+PERKS = {
+    'Супер-Удой': {
+        'description' : 'что-то делает',
+        'effect_type' : 'milk' , #какие бывают???
+        'effect_value': 5,
+        'rarity'      : '★☆☆' #common = ★☆☆, rare = ★★☆, epic = ★★★
+    },
+    'Быстрый рост': {
+        'description' : 'что-то делает',
+        'effect_type' : 'grow' , 
+        'effect_value': 5,
+        'rarity'      : '★☆☆' 
+    },
+    'Эффективное питание': {
+        'description' : 'что-то делает',
+        'effect_type' : 'feed' , 
+        'effect_value': 5,
+        'rarity'      : '★★☆' 
+    },
+    'Двойняшки': {
+        'description' : 'что-то делает',
+        'effect_type' : 'breed' , 
+        'effect_value': 5,
+        'rarity'      : '★★☆' 
+    },
+    'Крепкое здоровье': {
+        'description' : 'что-то делает',
+        'effect_type' : 'healt' , 
+        'effect_value': 5,
+        'rarity'      : '★★★' 
+    },
+
+
+}
+
 
 PERK_THEMED_NAMES = {
             'Супер-Удой': {
@@ -51,3 +100,6 @@ MALE_FULLNAMES = [
                     'Могучий', 'Богатырь', 'Гром', 'Молодец', 'Добрыня',
                     'Бычок', 'Крутой', 'Яростный'
                 ]
+
+
+MATURITY_HOURS_LEFT = 5

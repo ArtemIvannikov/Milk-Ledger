@@ -9,10 +9,10 @@ import config
 from data import storage
 
 class Animal():
-    db = storage.Storage()
     '''базовый класс для всех животных'''
-    def __init__(self):
-        pass
+    def __init__(self, id: int, name, type, gender, perks: list):
+        self.db = storage.Storage(config.PATH)
+        self.name = name
 
     def age_up(self):
         '''увеличивает возраст животного'''
@@ -22,31 +22,37 @@ class Animal():
         '''проверяет взрослое ли животное'''
         pass
 
-    def can_breed(self): 
+    def can_breed(self) -> bool: 
         '''проверяет, может ли животное размножаться'''
-        pass
+        return True 
 
     @staticmethod
-    def create_new_animal(): #WARNING NOT WORK
+    def create_new_animal(storage, **details): #WARNING NOT WORK
         '''создает взрослое животное для покупки в магазине'''
-
-        gender = random.choice(('male', 'female'))
-        type = 'bull' if gender == 'male' else 'cow'
-        perks = Animal._generate_new_animal_perks()
+        new_animal_id = storage.get_next_animal_id()
+        gender = details['gender']
+        animal_type = details['type']
+        perks = details['perks']
         new_animal_name = Animal._generate_name(gender, perks)
-        new_animal = {
-            'name': new_animal_name,
-            'type': type,
-            'gender': gender,
-            'age': 1,
-            'location_type': 'market',
-        }
-        db.save_animal(new_animal)
+      
+        match animal_type:
+            case 'cow':
+                animal = Cow(id=new_animal_id, name=new_animal_name, 
+                            type=animal_type, gender=gender, perks=perks, 
+                            milk_per_day=details['milk_per_day'], is_pregnant=0)
+                return animal
 
+            case 'bull':
+                animal = Bull(id=new_animal_id, name=new_animal_name, 
+                            type=animal_type, gender=gender, perks=perks)
+                return animal
 
-    @staticmethod
-    def _generate_new_animal_perks():
-        pass
+            case 'calf':
+                animal = Calf(id=new_animal_id, name=new_animal_name, 
+                            type=animal_type, gender=gender, perks=perks,
+                            maturity_hours_left=config.MATURITY_HOURS_LEFT) 
+                return animal
+        
 
 
     @staticmethod   
@@ -77,7 +83,7 @@ class Animal():
                 return random_name
 
     @staticmethod
-    def _get_perk_themed_name(gender, perks=None):
+    def _get_perk_themed_name(gender, perks):
         '''Выбирает случайное прилагательное для перка животного '''
         perk_themed_names = config.PERK_THEMED_NAMES
 
@@ -89,25 +95,45 @@ class Animal():
             if perk in perk_themed_names:
                 return perk_themed_names[perk][gender]
 
+
+
         
 
 class Cow(Animal):
-    def __init__(self):
-        pass
+    def __init__(self, id: int, name, type, gender, perks: list, milk_per_day, is_pregnant):
+        super().__init__(id, name, type, gender, perks)
+        self.is_pregnant = is_pregnant
+    def __repr__(self):
+        return f"получилась {self.__class__.__name__} {self.name}"
 
     def produce_milk(self):
         '''определение количества произведенного молока'''
         pass
 
+    def can_breed(self):
+        if self.is_pregnant == 0:
+            return True
+        else:
+            return False
+        
+
 
 class Bull(Animal):
-    def __init__(self):
-        pass
+
+    def __repr__(self):
+        return f"получился {self.__class__.__name__} {self.name}"
 
 
 class Calf(Animal):
-    def __init__(self):
-        pass
+    def __init__(self, id: int, name, type, gender, perks: list, maturity_hours_left):
+        super().__init__(id, name, type, gender, perks)
+        
+
+    def __repr__(self):
+        return f"получился {self.__class__.__name__} {self.name}"
+
+    def can_breed(self):
+        return False
 
     def mature_calf(self):
         '''превращает теленка во взрослое животное'''
