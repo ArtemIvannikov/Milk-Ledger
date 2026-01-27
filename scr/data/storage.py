@@ -62,6 +62,7 @@ class Storage():
                 name TEXT NOT NULL,
                 type TEXT NOT NULL, 
                 gender TEXT NOT NULL,
+                rarity TEXT NOT NULL,
                 age REAL DEFAULT 0, 
                 birth_timestamp REAL NOT NULL,
 
@@ -137,23 +138,61 @@ class Storage():
     def init_or_update_perks_table(self, perks_dict):
         '''заполняет таблицу perks перками из словаря в конфиге'''
         for perk_id, perk_data in perks_dict.items():
-            self.cursor.execute('''
-                INSERT OR REPLACE INTO perks
-                (name, description, effect_type, effect_value, rarity)
-                VALUES (?, ?, ?, ?, ?)
-                ''', (perk_id, perk_data['description'], perk_data['effect_type'], 
-                    perk_data['effect_value'],  perk_data['rarity'],))
+            exist = self.cursor.execute('SELECT * FROM perks WHERE name = ?', (perk_id,)).fetchone()
+
+            if exist:
+                self.cursor.execute('''
+                    UPDATE perks
+                    SET 
+                        description  = ?,
+                        effect_type  = ?,
+                        effect_value = ?,
+                        rarity       = ?
+                    WHERE name = ? AND (
+                        description     != ?
+                        OR effect_type  != ?
+                        OR effect_value != ?
+                        OR rarity       != ?
+                        )
+                    ''', (perk_data['description'], 
+                          perk_data['effect_type'], 
+                          perk_data['effect_value'],  
+                          perk_data['rarity'],
+                          perk_id, 
+                          perk_data['description'], 
+                          perk_data['effect_type'], 
+                          perk_data['effect_value'],  
+                          perk_data['rarity'],)
+                    )
+            else:
+                self.cursor.execute('''
+                    INSERT INTO perks
+                    (name, description, effect_type, effect_value, rarity)
+                    VALUES (?, ?, ?, ?, ?)
+                    ''', (perk_id, perk_data['description'], perk_data['effect_type'], 
+                            perk_data['effect_value'],  perk_data['rarity'],))
+
         self.connection.commit()    
 
 
-    def save_animal(self, animal_data):
+    def save_animal(self, animal):
         # сохраняет даннные животного
         self.cursor.execute('''
-            INSERT OR REPLACE INTO animals
-            (name, type, gender, age, ...)
-            VALUES (?, ?, ?, ?, ...)
+            INSERT or REPLACE INTO animals
+            (id, name, type, gender, rarity, milk_per_day, maturity_hours_left, location_type,...)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ...)
 
-            ''', (animal_data, ))
+            ''', (getattr(animal, 'id', None),
+                 getattr(animal, 'name', None),
+                 getattr(animal, 'type', None),
+                 getattr(animal, 'gender', None),
+                 getattr(animal, 'rarity', None),
+                 getattr(animal, 'milk_per_day', None),
+                 getattr(animal, 'maturity_hours_left', None),
+                 getattr(animal, 'location_type', None)
+                 ))
+
+        animal_id = getattr(animal, 'id')
 
         self._save_animal_perk(self, animal_id, perks)
 
@@ -206,13 +245,12 @@ class Storage():
 
     def _get_perk_id(self, perk):
         result = self.cursor.execute('SELECT id FROM perks WHERE name = ?', (perk,)).fetchone()
-        print (result[0]) 
-        self.cursor.execute("SELECT * FROM perks")
-        columns = self.cursor.fetchall()
-        print("Структура таблицы perks:")
-        for col in columns:
-            print(col)
-        return result[0]
+        yield result[0]
+
+    def get_list_perks(self, quantity):
+        result = self.cursor.execute('SELECT name FROM perks ORDER BY RANDOM() LIMIT ?', (quantity, )).fetchall()
+        list_perks = [row[0] for row in result]
+        return list_perks
 
     def load_all_alive_animals(self):
         self.cursor.execute('SELECT * FROM animals WHERE is_alive = 1')
@@ -229,7 +267,5 @@ class Storage():
         
 
 
-
-
-p = Storage(config.PATH)
-p._get_perk_id('Быстрый рост')
+s = Storage(config.PATH)
+s.get_list_perks(3)

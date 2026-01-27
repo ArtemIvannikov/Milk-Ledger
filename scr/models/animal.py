@@ -10,9 +10,17 @@ from data import storage
 
 class Animal():
     '''базовый класс для всех животных'''
-    def __init__(self, id: int, name, type, gender, perks: list):
+    def __init__(self, id: int, name, type, gender, rarity, perks: list):
         self.db = storage.Storage(config.PATH)
         self.name = name
+        self.rarity = rarity
+        self.perks = perks
+        self.id = id
+        self.location_type = None
+        self.type = type
+        self.gender = gender
+        self.milk_per_day = None
+        self.maturity_hours_left = None
 
     def age_up(self):
         '''увеличивает возраст животного'''
@@ -33,23 +41,25 @@ class Animal():
         gender = details['gender']
         animal_type = details['type']
         perks = details['perks']
+        rarity = details['rarity']
         new_animal_name = Animal._generate_name(gender, perks)
       
         match animal_type:
             case 'cow':
                 animal = Cow(id=new_animal_id, name=new_animal_name, 
-                            type=animal_type, gender=gender, perks=perks, 
+                            type=animal_type, gender=gender, rarity=rarity,
+                            perks=perks, 
                             milk_per_day=details['milk_per_day'], is_pregnant=0)
                 return animal
 
             case 'bull':
                 animal = Bull(id=new_animal_id, name=new_animal_name, 
-                            type=animal_type, gender=gender, perks=perks)
+                            type=animal_type, gender=gender, rarity=rarity, perks=perks)
                 return animal
 
             case 'calf':
                 animal = Calf(id=new_animal_id, name=new_animal_name, 
-                            type=animal_type, gender=gender, perks=perks,
+                            type=animal_type, gender=gender, rarity=rarity, perks=perks,
                             maturity_hours_left=config.MATURITY_HOURS_LEFT) 
                 return animal
         
@@ -100,11 +110,12 @@ class Animal():
         
 
 class Cow(Animal):
-    def __init__(self, id: int, name, type, gender, perks: list, milk_per_day, is_pregnant):
-        super().__init__(id, name, type, gender, perks)
+    def __init__(self, id: int, name, type, gender, rarity, perks: list, milk_per_day, is_pregnant):
+        super().__init__(id, name, type, gender, rarity, perks)
         self.is_pregnant = is_pregnant
+        self.milk_per_day = milk_per_day
     def __repr__(self):
-        return f"получилась {self.__class__.__name__} {self.name}"
+        return f"получилась {self.__class__.__name__} {self.name} {self.rarity}"
 
     def produce_milk(self):
         '''определение количества произведенного молока'''
@@ -121,16 +132,17 @@ class Cow(Animal):
 class Bull(Animal):
 
     def __repr__(self):
-        return f"получился {self.__class__.__name__} {self.name}"
+        return f"получился {self.__class__.__name__} {self.name} {self.rarity} с перками {self.perks}"
 
 
 class Calf(Animal):
-    def __init__(self, id: int, name, type, gender, perks: list, maturity_hours_left):
-        super().__init__(id, name, type, gender, perks)
+    def __init__(self, id: int, name, type, gender, rarity, perks: list, maturity_hours_left):
+        super().__init__(id, name, type, gender, rarity, perks)
+        self.maturity_hours_left = maturity_hours_left
         
 
     def __repr__(self):
-        return f"получился {self.__class__.__name__} {self.name}"
+        return f"получился  {self.__class__.__name__} {self.name} {self.rarity}"
 
     def can_breed(self):
         return False

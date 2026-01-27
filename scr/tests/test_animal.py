@@ -40,6 +40,7 @@ class Tests(unittest.TestCase):
 			'type': 'cow',
 			'perks': ['Супер-Удой'],
 			'milk_per_day': 10,
+			'rarity': 'common',
 		}
 
 		result = Animal.create_new_animal(self.storage, **details)
@@ -52,9 +53,11 @@ class Tests(unittest.TestCase):
 			'gender': 'male',
 			'type': 'bull',
 			'perks': ['Супер-Удой'],
+			'rarity': 'common',
 		}
 
 		result = Animal.create_new_animal(self.storage, **details)
+		print(getattr(result, 'id'))
 		print(result)
 
 	def test_create_new_animal_calf(self):
@@ -64,6 +67,7 @@ class Tests(unittest.TestCase):
 			'type': 'calf',
 			'perks': ['Супер-Удой'],
 			'milk_per_day': 10,
+			'rarity': 'common',
 		}
 
 		result = Animal.create_new_animal(self.storage, **details)

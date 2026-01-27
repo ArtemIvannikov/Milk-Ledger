@@ -11,18 +11,24 @@ else:
 
 PATH = os.path.join(BASE_DIR, 'my_database.db')
 
+STARTER_PACK = {
+    'bull': 2,
+    'cow': 4,
+}
+
+
 
 PERKS = {
     'Супер-Удой': {
         'description' : 'что-то делает',
         'effect_type' : 'milk' , #какие бывают???
-        'effect_value': 5,
-        'rarity'      : '★☆☆' #common = ★☆☆, rare = ★★☆, epic = ★★★
+        'effect_value': 3,
+        'rarity'      : "★☆☆" #common = ★☆☆, rare = ★★☆, epic = ★★★
     },
     'Быстрый рост': {
         'description' : 'что-то делает',
         'effect_type' : 'grow' , 
-        'effect_value': 5,
+        'effect_value': 4,
         'rarity'      : '★☆☆' 
     },
     'Эффективное питание': {
@@ -34,13 +40,13 @@ PERKS = {
     'Двойняшки': {
         'description' : 'что-то делает',
         'effect_type' : 'breed' , 
-        'effect_value': 5,
+        'effect_value': 6,
         'rarity'      : '★★☆' 
     },
     'Крепкое здоровье': {
         'description' : 'что-то делает',
         'effect_type' : 'healt' , 
-        'effect_value': 5,
+        'effect_value': 7,
         'rarity'      : '★★★' 
     },
 
